@@ -12,14 +12,19 @@ A very simple python library for normalizing and cleaning Persian text.
 
 ```python3
 >>> import davat
+
 >>> sample_text = "بِسْمِ اللَّهِ الرَّحْمنِ الرَّحِيمِ"
+
 >>> davat.normalize(sample_text)
 'بسم الله الرحمن الرحیم'
+
 >>> sample_text = """این یك متن تست است که حروف عربي ، کشیـــــده 
 'اعداد 12345' و... دارد     که می خواهیم آن را نرمالایز کنیم ."""
+
 >>> print(davat.normalize(sample_text))
 این یک متن تست است که حروف عربی، کشیده
 «اعداد ۱۲۳۴۵» و …  دارد  که می‌خواهیم آن را نرمالایز کنیم.
+
 >>> sample_text = """
 ... متنی برای برسی تابع تمیز کردن متن
 ... که #هشتگ_ها را خیلی عاااااللللییییی!!!! تبدیل به متن عادی می‌کند!
@@ -29,6 +34,8 @@ A very simple python library for normalizing and cleaning Persian text.
 ... و ...
 ... http://localhost:8888
 ... """
+
+
 >>> # davat.clean(
 ... #     text: str,
 ... #     remove_links=True,
@@ -45,6 +52,8 @@ A very simple python library for normalizing and cleaning Persian text.
 ... #     remove_extraspaces=True,
 ... #)
 ... 
+
+
 >>> text = davat.clean(sample_text)
 >>> print(text)
 متنی برای برسی تابع تمیز کردن متن 
