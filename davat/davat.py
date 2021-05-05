@@ -14,7 +14,7 @@ import re
 import emoji
 
 
-def normalize(text: str) -> str:
+def normalize(text: str, convert_digits=True) -> str:
     """
     Summary:
 
@@ -87,16 +87,18 @@ def normalize(text: str) -> str:
 
     # replace arabic and english digits with equivalent persian digits
     num_dict = dict()
-    num_dict[u"0"] = u"۰"
-    num_dict[u"1"] = u"۱"
-    num_dict[u"2"] = u"۲"
-    num_dict[u"3"] = u"۳"
-    num_dict[u"4"] = u"۴"
-    num_dict[u"5"] = u"۵"
-    num_dict[u"6"] = u"۶"
-    num_dict[u"7"] = u"۷"
-    num_dict[u"8"] = u"۸"
-    num_dict[u"9"] = u"۹"
+    if convert_digits:
+        num_dict[u"0"] = u"۰"
+        num_dict[u"1"] = u"۱"
+        num_dict[u"2"] = u"۲"
+        num_dict[u"3"] = u"۳"
+        num_dict[u"4"] = u"۴"
+        num_dict[u"5"] = u"۵"
+        num_dict[u"6"] = u"۶"
+        num_dict[u"7"] = u"۷"
+        num_dict[u"8"] = u"۸"
+        num_dict[u"9"] = u"۹"
+        num_dict[u"%"] = u"٪"
 
     num_dict[u"٠"] = u"۰"
     num_dict[u"١"] = u"۱"
@@ -108,8 +110,6 @@ def normalize(text: str) -> str:
     num_dict[u"٧"] = u"۷"
     num_dict[u"٨"] = u"۸"
     num_dict[u"٩"] = u"۹"
-
-    num_dict[u"%"] = u"٪"
 
     num_pattern = re.compile(r"(" + "|".join(num_dict.keys()) + r")")
     text = num_pattern.sub(lambda x: num_dict[x.group()], text)

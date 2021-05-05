@@ -9,7 +9,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
     name="davat",
-    version="0.0.2",
+    version="0.0.3",
     description="davat(دوات) is a very simple tools for normalizeing and cleaning Persian text",
     long_description=README,
     long_description_content_type="text/markdown",
