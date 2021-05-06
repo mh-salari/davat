@@ -175,7 +175,7 @@ def normalize(text: str, convert_digits=True) -> str:
             r"\1 \2",
         ),
         # Remove repeating characters (keep 2 repeats)
-        (r"(.)\1+", r"\1\1"),
+        (r"(ئآابپتثجچحخدذرزژسشصضطظعغفقکگلمنوهیچ)\1+", r"\1\1"),
     ]
 
     for pattern, replac in regex_list:
