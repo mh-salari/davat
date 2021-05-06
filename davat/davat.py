@@ -161,7 +161,7 @@ def normalize(text: str, convert_digits=True) -> str:
             + punctuation_after[:3]
             + "])([^ "
             + punctuation_after
-            + "\d۰۱۲۳۴۵۶۷۸۹])",
+            + "\w\d۰۱۲۳۴۵۶۷۸۹])",
             r"\1 \2",
         ),
         # put space after punctuation
