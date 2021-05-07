@@ -182,11 +182,11 @@ def normalize(text: str, convert_digits=True) -> str:
         text = re.sub(pattern, replac, text)
 
     # fix "؟ " in links
-    text = re.sub(r"(\w+)(؟ )", r"\1?", text)
+    text = re.sub(r"([a-zA-z]+)(؟ )", r"\1?", text)
     # fix "، " in English numbers
-    text = re.sub(r"(\d+)(، )", r"\1,", text)
+    text = re.sub(r"([0-9]+)(، )", r"\1,", text)
     # fix "٫" in English numbers
-    text = re.sub(r"(\d+)(٫)", r"\1.", text)
+    text = re.sub(r"([0-9]+)(٫)", r"\1.", text)
 
     return text
 
