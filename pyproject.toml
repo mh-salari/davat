@@ -1,0 +1,43 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "davat"
+dynamic = ["version"]
+description = "A simple library for normalizing and cleaning Persian text"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "Mohammadhossein Salari", email = "mohammadhossein.salar@gmail.com"},
+]
+keywords = ["persian", "farsi", "text-normalization", "text-cleaning", "nlp"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Text Processing",
+    "Topic :: Text Processing :: Linguistic",
+]
+dependencies = [
+    "emoji>=1.2.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/mh-salari/davat"
+Repository = "https://github.com/mh-salari/davat"
+Issues = "https://github.com/mh-salari/davat/issues"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/davat"]

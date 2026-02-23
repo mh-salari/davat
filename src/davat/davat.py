@@ -284,7 +284,7 @@ def clean(
 
     if remove_emojis:
         # Remove emojis
-        text = emoji.get_emoji_regexp().sub(u"", text)
+        text = emoji.replace_emoji(text, replace="")
 
         text = (
             text.replace(":(", "")

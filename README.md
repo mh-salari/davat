@@ -1,7 +1,10 @@
-Davat(دوات)
-====
+# Davat (دوات)
 
-A very simple python library for normalizing and cleaning Persian text.
+[![PyPI version](https://img.shields.io/pypi/v/davat)](https://pypi.org/project/davat/)
+[![Downloads](https://static.pepy.tech/badge/davat)](https://pepy.tech/project/davat)
+[![License](https://img.shields.io/pypi/l/davat)](https://github.com/mh-salari/davat/blob/main/LICENSE)
+
+A simple Python library for normalizing and cleaning Persian text.
 
 + Text Normalizing
 + Text Cleaning
