@@ -84,6 +84,30 @@ def remove_links(text: str) -> str:
     return "".join(result)
 
 
+def remove_empty_brackets(text: str) -> str:
+    """Remove empty or whitespace-only bracket/paren artifacts.
+
+    After link/mention removal, leftover patterns like [](), (), [], «», or
+    Persian quotation marks with nothing inside can remain. This step cleans them.
+
+    Args:
+        text: Input text potentially containing empty bracket artifacts.
+
+    Returns:
+        Text with empty bracket artifacts removed.
+
+    """
+    text = re.sub(r"\[\s*]\s*\(\s*\)", "", text)  # []() or [ ]( )
+    text = re.sub(r"\(\s*\)", "", text)  # () or ( ) or (  )
+    text = re.sub(r"\[\s*]", "", text)  # [] or [ ]
+    text = re.sub(r"«\s*»", "", text)  # «» or « »
+    text = re.sub(r"﴾\s*﴿", "", text)  # ﴾﴿ or ﴾ ﴿
+    text = re.sub(r'"\s*"', "", text)  # "" or " "
+    text = re.sub(r"'\s*'", "", text)  # '' or ' '
+    text = re.sub(r"\|\s*\|", "", text)  # || or | |
+    return text
+
+
 def remove_mentions(text: str) -> str:
     """Remove @mentions from text.
 
@@ -481,6 +505,7 @@ def remove_extra_spaces(text: str) -> str:
 # --- Step presets ---
 PERSIAN_STEPS = [
     remove_links,
+    remove_empty_brackets,
     remove_mentions,
     remove_hashtags,
     remove_emojis,
@@ -492,6 +517,7 @@ PERSIAN_STEPS = [
 
 MINIMAL_STEPS = [
     remove_links,
+    remove_empty_brackets,
     remove_emojis,
     remove_extra_spaces,
 ]
