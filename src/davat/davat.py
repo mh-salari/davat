@@ -165,10 +165,10 @@ def remove_emojis(text: str) -> str:
 
 
 def remove_markdown(text: str) -> str:
-    """Remove markdown formatting, keeping the inner text.
+    """Remove markdown formatting, keeping the inner text and URLs.
 
     Strips **bold**, __italic__, ~~strikethrough~~, `code`,
-    and [link text](url) (keeps link text, removes url).
+    and [link text](url) → "link text url" (keeps both text and url).
 
     Args:
         text: Input text potentially containing markdown formatting.
@@ -177,8 +177,10 @@ def remove_markdown(text: str) -> str:
         Text with markdown syntax removed but content preserved.
 
     """
-    # [link text](url) → link text (also handles empty url from prior link removal)
-    text = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", text)
+    # [link text](url) → "link text url" (keeps both text and url)
+    # Empty urls from prior link removal: [text]() → just text
+    text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r"\1 \2", text)
+    text = re.sub(r"\[([^\]]+)\]\(\)", r"\1", text)
     # **bold** or __italic__
     text = re.sub(r"\*\*(.+?)\*\*", r"\1", text)
     text = re.sub(r"__(.+?)__", r"\1", text)
