@@ -44,3 +44,15 @@ def test_no_punctuation():
 
 def test_two_dots():
     assert fix_multiple_punctuations("..") == "."
+
+
+def test_dots_in_url_preserved():
+    text = "see https://example.com/../path for info"
+    result = fix_multiple_punctuations(text)
+    assert "/../" in result
+
+
+def test_question_marks_in_url_preserved():
+    text = "visit https://example.com/search??q=test now"
+    result = fix_multiple_punctuations(text)
+    assert "??" in result

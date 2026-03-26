@@ -37,3 +37,9 @@ def test_empty_string():
 
 def test_only_mention():
     assert remove_mentions("@onlythis") == ""
+
+
+def test_at_in_url_preserved():
+    text = "check https://example.com/user@domain/path here"
+    result = remove_mentions(text)
+    assert "user@domain" in result

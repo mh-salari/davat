@@ -84,6 +84,34 @@ def remove_links(text: str) -> str:
     return "".join(result)
 
 
+def _replace_outside_urls(text: str, replacements: dict[str, str]) -> str:
+    """Apply string replacements only to text outside URLs.
+
+    URLs often contain characters like _ | . ? that have different meaning in
+    plain text. This helper splits text on URL boundaries, applies replacements
+    only to the non-URL parts, and reassembles.
+
+    Args:
+        text: Input text potentially containing URLs.
+        replacements: Mapping of old → new strings to apply outside URLs.
+
+    Returns:
+        Text with replacements applied only outside URL spans.
+
+    """
+    parts = _URL_PATTERN.split(text)
+    urls = _URL_PATTERN.findall(text)
+    result = []
+    for i, chunk in enumerate(parts):
+        replaced = chunk
+        for old, new in replacements.items():
+            replaced = replaced.replace(old, new)
+        result.append(replaced)
+        if i < len(urls):
+            result.append(urls[i])
+    return "".join(result)
+
+
 def remove_empty_brackets(text: str) -> str:
     """Remove empty or whitespace-only bracket/paren artifacts.
 
@@ -109,9 +137,10 @@ def remove_empty_brackets(text: str) -> str:
 
 
 def remove_mentions(text: str) -> str:
-    """Remove @mentions from text.
+    """Remove @mentions from text, preserving URLs that contain @.
 
-    Removes any word starting with @ (e.g. @username).
+    Removes any word starting with @ (e.g. @username) but leaves URLs intact
+    since they may contain @ in paths or query parameters.
 
     Args:
         text: Input text potentially containing mentions.
@@ -120,7 +149,15 @@ def remove_mentions(text: str) -> str:
         Text with all @mentions removed.
 
     """
-    return re.sub(r"@\S+", "", text)
+    # Split on URLs, only strip mentions from non-URL parts
+    parts = _URL_PATTERN.split(text)
+    urls = _URL_PATTERN.findall(text)
+    result = []
+    for i, part in enumerate(parts):
+        result.append(re.sub(r"@\S+", "", part))
+        if i < len(urls):
+            result.append(urls[i])
+    return "".join(result)
 
 
 def remove_hashtags(text: str, keep_text: bool = True) -> str:
@@ -188,11 +225,12 @@ def remove_markdown(text: str) -> str:
     text = re.sub(r"~~(.+?)~~", r"\1", text)
     # `inline code`
     text = re.sub(r"`(.+?)`", r"\1", text)
-    # leftover * and _ from partial formatting
-    text = text.replace("*", "").replace("_", " ")
-    # leftover ~~ and | (separators/decorators in messaging apps)
+    # leftover * — remove unconditionally
+    text = text.replace("*", "")
+    # leftover _ and | — replace outside URLs only (URLs contain meaningful _ and |)
+    text = _replace_outside_urls(text, {"_": " ", "|": " "})
+    # leftover ~~
     text = text.replace("~~", "")
-    text = text.replace("|", " ")
     return text
 
 
@@ -423,7 +461,7 @@ def remove_punctuations(text: str) -> str:
 def fix_multiple_punctuations(text: str) -> str:
     """Collapse repeated punctuation marks to a single instance.
 
-    Handles: ، ؟ ? . !
+    Handles: ، ؟ ? . ! — only outside URLs (URLs may contain .. or ?? legitimately).
 
     Args:
         text: Input text with potentially repeated punctuation.
@@ -432,12 +470,19 @@ def fix_multiple_punctuations(text: str) -> str:
         Text with repeated punctuation collapsed.
 
     """
-    text = re.sub(r"،+", "،", text)
-    text = re.sub(r"؟+", "؟", text)
-    text = re.sub(r"\?+", "?", text)
-    text = re.sub(r"\.+", ".", text)
-    text = re.sub(r"!+", "!", text)
-    return text
+    parts = _URL_PATTERN.split(text)
+    urls = _URL_PATTERN.findall(text)
+    result = []
+    for i, chunk in enumerate(parts):
+        collapsed = re.sub(r"،+", "،", chunk)
+        collapsed = re.sub(r"؟+", "؟", collapsed)
+        collapsed = re.sub(r"\?+", "?", collapsed)
+        collapsed = re.sub(r"\.+", ".", collapsed)
+        collapsed = re.sub(r"!+", "!", collapsed)
+        result.append(collapsed)
+        if i < len(urls):
+            result.append(urls[i])
+    return "".join(result)
 
 
 def remove_ellipsis(text: str) -> str:
